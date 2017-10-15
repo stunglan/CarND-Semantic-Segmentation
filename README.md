@@ -12,9 +12,7 @@ The one problem I had was that the first virtial machine I used was one with the
  little memory so I had to switch to a machine with a tesla k80 processor.
 
 ##### Dataset
-I downloaded the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php) from [here](http:/\
-/www.cvlibs.net/download.php?file=data_road.zip).
-
+I downloaded the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php).
 
 ### Implementation
 I saw the project walkthrough video with Aaron and Brok, and my implementations follow the template provided\

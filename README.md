@@ -6,7 +6,7 @@ In this project, I label the pixels of a road in images using a Fully Convolutio
 ##### Frameworks and Packages
 I used the community ami `udacity-carnd-advanced-deep-learning - ami-3e6c7547`, update of all packages and h\
 ad to re-install `tensorflow-gpu`.
-I har to add the package `tqdm`.
+I had to add the package `tqdm`.
 
 The one problem I had was that the first virtial machine I used was one with the K520 processor. This had to\
  little memory so I had to switch to a machine with a tesla k80 processor.

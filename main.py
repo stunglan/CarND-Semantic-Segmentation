@@ -130,6 +130,14 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param learning_rate: TF Placeholder for learning rate
     """
     # TODO: Implement function
+
+    #keep_prob_v = 0.5
+    #learning_rate_v = 0.0009
+
+    keep_prob_v = 0.75
+    learning_rate_v = 0.0001
+
+    
     sess.run(tf.global_variables_initializer())
     loss_list = []
     batch = 0
@@ -141,11 +149,12 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
             batch += 1
             _, loss = sess.run([train_op, cross_entropy_loss],
                                feed_dict={input_image: image, correct_label: label,
-                                          keep_prob: 0.5, learning_rate: 0.0009})
+                                          keep_prob: keep_prob_v, learning_rate: learning_rate_v})
             print(f"epoch = {epoch+1}, batch = {batch}, loss = {loss:{10}.{3}}")
 
             loss_list.append([epoch+1,batch,loss])
-    with open('loss.txt','wb') as f:
+    fname = f"loss-(lr({learning_rate_v:{10}.{3}})-kp({keep_prop_v:{10}.{3}}).pkl")
+    with open(fname,'wb') as f:
         pickle.dump(loss_list,f)
             
 tests.test_train_nn(train_nn)

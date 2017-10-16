@@ -4,7 +4,7 @@ import helper
 import warnings
 from distutils.version import LooseVersion
 import project_tests as tests
- 
+import pickle 
   
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
@@ -57,21 +57,27 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # TODO: Implement function
     # layer 7
     conv_1x1 = tf.layers.conv2d(vgg_layer7_out,num_classes,1,padding='same',
+                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     output = tf.layers.conv2d_transpose(conv_1x1,num_classes,4,2,padding='same',
+                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     # using skip layers as described in in decode section
     # layer 4
     conv_1x1 = tf.layers.conv2d(vgg_layer4_out,num_classes,1,padding='same',
+                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     output = tf.add(output,conv_1x1)
     output = tf.layers.conv2d_transpose(output,num_classes,4,2,padding='same',
+                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     # layer 3
     conv_1x1 = tf.layers.conv2d(vgg_layer3_out,num_classes,1,padding='same',
+                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))    
     output = tf.add(output,conv_1x1)
     output = tf.layers.conv2d_transpose(output,num_classes,16,8,padding='same',
+                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     
@@ -121,23 +127,24 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     """
     # TODO: Implement function
     sess.run(tf.global_variables_initializer())
-
+    loss_list = []
     batch = 0
     print(f"Training with epochs = {epochs}, and batch_size = {batch_size}")
     for epoch in range(epochs):
-        print(f"epoch = {epoch}")
+        print(f"epoch = {epoch+1}")
         batch = 0
         for image,label in get_batches_fn(batch_size):
-            print(f"batch = {batch}")
             batch += 1
             _, loss = sess.run([train_op, cross_entropy_loss],
                                feed_dict={input_image: image, correct_label: label,
                                           keep_prob: 0.5, learning_rate: 0.0009})
-            print(f"loss = {loss:{10}.{3}}")
-            print()
-    
-tests.test_train_nn(train_nn)
+            print(f"epoch = {epoch+1}, batch = {batch}, loss = {loss:{10}.{3}}")
 
+            loss_list.append([epoch+1,batch,loss])
+    with open('loss.txt','wb') as f:
+        pickle.dump(loss_list,f)
+            
+tests.test_train_nn(train_nn)
 
 def run():
     num_classes = 2
@@ -171,8 +178,8 @@ def run():
 
         logits, train_op, cross_entropy_loss = optimize(layer_output, correct_label, learning_rate, num_classes)
         # TODO: Train NN using the train_nn function
-        epochs = 60
-        batch_size = 32
+        epochs = 30
+        batch_size = 3
 
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
                  correct_label, keep_prob, learning_rate)

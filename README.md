@@ -1,6 +1,7 @@
 # Semantic Segmentation
 ### Introduction
 In this project, I label the pixels of a road in images using a Fully Convolutional Network (FCN).
+![road segment](sample.png)
 
 ### Setup
 ##### Frameworks and Packages
@@ -21,5 +22,14 @@ I saw the project walkthrough video with Aaron and Brok, and my implementations 
 All my code is in the `main.py` file indicated by the "TODO" comments.
 I did not do the "OPTIONAL" tasks.
 
-I ended out with 60 Epochs and a batch size of 32.
+<s>I ended out with 60 Epochs and a batch size of 32.</s>
+
+#### Additional comments in second hand-in:
+I added an kernel initializer in the `layers` function. I experimented both with `tf.contrib.layers.xavier_initializer` and `tf.truncated_normal_initializer`, and found best results using the latter with a standard deviation value of 0.01.
+
+I changed the number of `epochs` and the `batch size` after the reviewers comments, using an epoch value of 30 and batch size 3. 
+
+I experiemented with the `keep probabilty` and `learning rate`, ended up with a keep_probability of 0.75 and learning rate of 0.0001. The loss vs epoch during the calulation is shown below: ![loss curve](loss.png)  
+
+
 

@@ -56,28 +56,32 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
     # TODO: Implement function
     # layer 7
+
+    #kernel_init = tf.contrib.layers.xavier_initializer()
+    kernel_init = tf.truncated_normal_initializer(stddev = 0.01)
+
     conv_1x1 = tf.layers.conv2d(vgg_layer7_out,num_classes,1,padding='same',
-                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                kernel_initializer=kernel_init,
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     output = tf.layers.conv2d_transpose(conv_1x1,num_classes,4,2,padding='same',
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                        kernel_initializer=kernel_init,
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     # using skip layers as described in in decode section
     # layer 4
     conv_1x1 = tf.layers.conv2d(vgg_layer4_out,num_classes,1,padding='same',
-                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                kernel_initializer=kernel_init,
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     output = tf.add(output,conv_1x1)
     output = tf.layers.conv2d_transpose(output,num_classes,4,2,padding='same',
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                        kernel_initializer=kernel_init,
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     # layer 3
     conv_1x1 = tf.layers.conv2d(vgg_layer3_out,num_classes,1,padding='same',
-                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                kernel_initializer=kernel_init,
                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))    
     output = tf.add(output,conv_1x1)
     output = tf.layers.conv2d_transpose(output,num_classes,16,8,padding='same',
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                        kernel_initializer=kernel_init,
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     

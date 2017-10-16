@@ -16,5 +16,5 @@ for e in epoch:
         loss_list.append(elem)
 
 #print(loss_list)
-with open('loss_dummy.txt','wb') as f:
+	with open('loss_dummy.pkl','wb') as f:
     pickle.dump(loss_list,f)
